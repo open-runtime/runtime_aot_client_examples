@@ -1,0 +1,19 @@
+# runtime_aot_client_examples v0.0.2
+
+# Version Bump: v0.0.2
+
+**Date**: 2026-02-22T03:30:24.282221Z
+**Previous**: v0.0.1
+**Commits**: 5
+
+## Commits
+
+9feed3f fix: add unit test so CI has at least one non-integration test
+c2bc362 fix: tag voxtral test as integration to exclude from CI
+24d0479 fix: resolve analysis errors and apply dart fix auto-corrections
+8b0001f fix: update release.yaml to use .runtime_ci/ paths
+e534802 fix: use pieces-app/encrypt.git URL to match runtime_isomorphic_library
+
+
+---
+[Full Changelog](https://github.com/open-runtime/runtime_aot_client_examples/compare/v0.0.1...v0.0.2)
