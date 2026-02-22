@@ -8,7 +8,7 @@ import 'dart:io' show Directory, File;
 /// Caches the Descope access token locally so users don't have to
 /// re-authenticate via browser on every run.
 class TokenCache {
-  static const _cacheFileName = 'aot_self_contained_token_cache.json';
+  static const String _cacheFileName = 'aot_self_contained_token_cache.json';
 
   /// Get the cache file.
   static Future<File> _getCacheFile() async {
