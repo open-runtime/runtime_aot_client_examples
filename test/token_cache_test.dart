@@ -5,7 +5,7 @@ void main() {
   group('TokenCache', () {
     test('logTokenCacheStatus does not throw', () {
       // Smoke test: ensure the public API is accessible and does not throw.
-      expect(() => logTokenCacheStatus(), returnsNormally);
+      expect(logTokenCacheStatus, returnsNormally);
     });
   });
 }

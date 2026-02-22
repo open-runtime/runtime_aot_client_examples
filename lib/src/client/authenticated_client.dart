@@ -1,3 +1,4 @@
+// Printing is used for diagnostic output during authentication.
 // ignore_for_file: avoid_print
 
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart' show SecretKey;
@@ -50,6 +51,14 @@ import '../interceptor/secure_interceptor.dart' show SecureAOTAuthorizationInter
 /// await channel.shutdown();
 /// ```
 class AuthenticatedAOTClient {
+  AuthenticatedAOTClient._({
+    required SecureAOTAuthorizationInterceptor interceptor,
+    required this.orgId,
+    required this.userEmail,
+    required this.userId,
+    required this.accessToken,
+  }) : _interceptor = interceptor;
+
   /// The secure gRPC interceptor for authenticated requests.
   final SecureAOTAuthorizationInterceptor _interceptor;
 
@@ -64,14 +73,6 @@ class AuthenticatedAOTClient {
 
   /// The Descope access token.
   final String accessToken;
-
-  AuthenticatedAOTClient._({
-    required SecureAOTAuthorizationInterceptor interceptor,
-    required this.orgId,
-    required this.userEmail,
-    required this.userId,
-    required this.accessToken,
-  }) : _interceptor = interceptor;
 
   /// Creates an authenticated AOT client.
   ///
@@ -114,7 +115,7 @@ class AuthenticatedAOTClient {
         try {
           final descopeUserInfo = await getDescopeUserInfo(accessToken);
           effectiveUserEmail = descopeUserInfo.email;
-        } catch (e) {
+        } on Object catch (e) {
           print('⚠️ Failed to fetch email from Descope: $e');
         }
       }

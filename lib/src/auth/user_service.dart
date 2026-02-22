@@ -1,3 +1,4 @@
+// Printing is used for diagnostic output during user data fetching.
 // ignore_for_file: avoid_print
 
 import 'dart:convert' show json;
@@ -5,7 +6,7 @@ import 'dart:convert' show json;
 import 'package:http/http.dart' as http;
 
 /// Production user team service URL for fetching user/org data.
-const String defaultUserTeamServiceUrl = 'https://user-team-service-226509373556.us-central1.run.app';
+const defaultUserTeamServiceUrl = 'https://user-team-service-226509373556.us-central1.run.app';
 
 /// Fetches user data from the user team service.
 ///
@@ -23,9 +24,9 @@ const String defaultUserTeamServiceUrl = 'https://user-team-service-226509373556
 /// - apiKeys: Array of 13 encryption keys
 /// - Other user properties
 Future<Map<String, dynamic>> fetchUserDataFromService({
-  String? userTeamServiceUrl,
   required String userId,
   required String accessToken,
+  String? userTeamServiceUrl,
   bool useGlobalIdEndpoint = false,
 }) async {
   final effectiveUrl = userTeamServiceUrl ?? defaultUserTeamServiceUrl;
@@ -122,7 +123,7 @@ Future<({String? orgId, String? orgName, List<String> activeSubscriptions})> fet
       print('   ⚠️ Failed to fetch /aot: ${response.statusCode}');
       return (orgId: null, orgName: null, activeSubscriptions: <String>[]);
     }
-  } catch (e) {
+  } on Object catch (e) {
     print('   ⚠️ Error fetching org ID: $e');
     return (orgId: null, orgName: null, activeSubscriptions: <String>[]);
   }
@@ -178,9 +179,9 @@ List<String> extractUserKeys(Map<String, dynamic> userData) {
 ///
 /// Returns a list of 13 encryption keys.
 Future<List<String>> fetchUserKeysFromService({
-  String? userTeamServiceUrl,
   required String userId,
   required String accessToken,
+  String? userTeamServiceUrl,
   bool useGlobalIdEndpoint = false,
 }) async {
   // First fetch the complete user data
@@ -200,7 +201,7 @@ Future<List<String>> fetchUserKeysFromService({
     print('🔄 Fetching user data again using global ID: $globalId');
     final globalUserData = await fetchUserDataFromService(
       userTeamServiceUrl: userTeamServiceUrl,
-      userId: globalId,
+      userId: globalId as String,
       accessToken: accessToken,
       useGlobalIdEndpoint: true,
     );

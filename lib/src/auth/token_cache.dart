@@ -1,3 +1,4 @@
+// Printing is used for diagnostic output during token caching.
 // ignore_for_file: avoid_print
 
 import 'dart:convert' show base64, json, utf8;
@@ -8,7 +9,7 @@ import 'dart:io' show Directory, File;
 /// Caches the Descope access token locally so users don't have to
 /// re-authenticate via browser on every run.
 class TokenCache {
-  static const String _cacheFileName = 'aot_self_contained_token_cache.json';
+  static const _cacheFileName = 'aot_self_contained_token_cache.json';
 
   /// Get the cache file.
   static Future<File> _getCacheFile() async {
@@ -46,7 +47,7 @@ class TokenCache {
 
       await cacheFile.writeAsString(json.encode(cacheData));
       print('💾 Token cached successfully until $expiresAt');
-    } catch (e) {
+    } on Object catch (e) {
       print('⚠️ Failed to cache token: $e');
       // Don't throw - caching is optional
     }
@@ -93,7 +94,7 @@ class TokenCache {
       print('✅ Found valid cached token (expires at $expiresAtStr)');
       if (email != null) print('   📧 Cached user: $email');
       return (accessToken: accessToken, userId: userId, email: email);
-    } catch (e) {
+    } on Object catch (e) {
       print('⚠️ Error reading token cache: $e');
       return null;
     }
@@ -107,7 +108,7 @@ class TokenCache {
         await cacheFile.delete();
         print('🗑️ Token cache cleared');
       }
-    } catch (e) {
+    } on Object catch (e) {
       print('⚠️ Failed to clear cache: $e');
     }
   }
@@ -133,7 +134,7 @@ class TokenCache {
       if (exp is int) {
         return DateTime.fromMillisecondsSinceEpoch(exp * 1000);
       }
-    } catch (e) {
+    } on Object catch (e) {
       print('⚠️ Failed to parse JWT expiration: $e');
     }
     return null;
@@ -177,7 +178,7 @@ Future<void> logTokenCacheStatus() async {
           if (email != null) print('   📧 Cached user: $email');
         }
       }
-    } catch (e) {
+    } on Object catch (e) {
       print('   ⚠️ Error reading cache: $e');
     }
   } else {

@@ -1,3 +1,4 @@
+// Printing is used for diagnostic output during browser OAuth flow.
 // ignore_for_file: avoid_print
 
 import 'dart:convert' show base64Url, json, utf8;
@@ -8,7 +9,7 @@ import 'package:crypto/crypto.dart' show sha256;
 import 'package:http/http.dart' as http;
 
 /// Default Descope project ID for Pieces authentication.
-const String descopeProjectId = 'P2pgKajh2ElmCO6p7ioSPSpS6qev';
+const descopeProjectId = 'P2pgKajh2ElmCO6p7ioSPSpS6qev';
 
 /// Fetches a Descope access token through web browser authentication using PKCE flow.
 ///
@@ -80,7 +81,8 @@ Future<String> getDescopeAccessTokenViaBrowser({
   request.response
     ..statusCode = 200
     ..headers.set('content-type', 'text/html; charset=utf-8')
-    ..write('''<!DOCTYPE html>
+    ..write('''
+<!DOCTYPE html>
 <html>
 <head>
   <title>Authentication Successful</title>
@@ -94,8 +96,10 @@ Future<String> getDescopeAccessTokenViaBrowser({
   <h1 class="success">✅ Authentication Successful!</h1>
   <p class="message">You can close this tab and return to your application.</p>
 </body>
-</html>''')
-    ..close();
+</html>''');
+  // Response close is fire-and-forget; server shuts down immediately after.
+  // ignore: unawaited_futures
+  request.response.close();
 
   await server.close();
 
@@ -159,7 +163,7 @@ Future<({String userId, String? email})> getDescopeUserInfo(String accessToken) 
       }
       return jwtInfo;
     }
-  } catch (e) {
+  } on Object catch (e) {
     print('⚠️ Could not extract user info from JWT: $e');
   }
 
@@ -203,12 +207,8 @@ Future<({String userId, String? email})> getDescopeUserInfo(String accessToken) 
     final parts = jwt.split('.');
     if (parts.length != 3) return null;
 
-    // Decode the payload (middle part)
-    var payload = parts[1];
-    // Add padding if needed for base64 decoding
-    while (payload.length % 4 != 0) {
-      payload += '=';
-    }
+    // Decode the payload (middle part) with proper base64 padding
+    final payload = parts[1].padRight((parts[1].length + 3) ~/ 4 * 4, '=');
 
     final payloadBytes = base64Url.decode(payload);
     final payloadJson = utf8.decode(payloadBytes);
@@ -222,7 +222,7 @@ Future<({String userId, String? email})> getDescopeUserInfo(String accessToken) 
     final email = claims['email'] as String? ?? claims['preferred_username'] as String?;
 
     return (userId: userId, email: email);
-  } catch (e) {
+  } on Object {
     return null;
   }
 }

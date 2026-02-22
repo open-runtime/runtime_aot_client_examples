@@ -21,6 +21,55 @@
 /// );
 /// ```
 class AOTAuthorizationInterceptorClientMetadataOptions {
+  AOTAuthorizationInterceptorClientMetadataOptions({
+    required this.hmacSigningKey,
+    required this.encryptionKey,
+    required this.isrJSONString,
+    required this.globalKey,
+    required this.magicNumber,
+    required this.timeHeader,
+    required this.apiKey,
+    this.os,
+    this.userId,
+    this.userEmail,
+    this.clientIp,
+    this.countryIpName,
+    this.countryIpAddress,
+    this.countryIpCode,
+    this.osServerVersion,
+    this.accessToken,
+  });
+
+  /// Creates metadata with default values for optional fields.
+  factory AOTAuthorizationInterceptorClientMetadataOptions.withDefaults({
+    required String userId,
+    required String userEmail,
+    required String accessToken,
+    required String hmacSigningKey,
+    required String encryptionKey,
+    required String globalKey,
+    required String magicNumber,
+    required String timeHeader,
+    required String apiKey,
+  }) => AOTAuthorizationInterceptorClientMetadataOptions(
+    os: '8daf5be6-a57a-4f21-b23e-ac6c2e612e27', // Default OS identifier
+    userId: userId,
+    userEmail: userEmail,
+    clientIp: '127.0.0.1',
+    countryIpName: 'United States',
+    countryIpAddress: '127.0.0.1',
+    countryIpCode: 'US',
+    osServerVersion: '12.3.87-staging',
+    accessToken: accessToken,
+    hmacSigningKey: hmacSigningKey,
+    encryptionKey: encryptionKey,
+    isrJSONString: '{}', // Empty ISR for client usage
+    globalKey: globalKey,
+    magicNumber: magicNumber,
+    timeHeader: timeHeader,
+    apiKey: apiKey,
+  );
+
   /// Operating system identifier.
   final String? os;
 
@@ -68,55 +117,4 @@ class AOTAuthorizationInterceptorClientMetadataOptions {
 
   /// API key for authentication.
   final String apiKey;
-
-  AOTAuthorizationInterceptorClientMetadataOptions({
-    this.os,
-    this.userId,
-    this.userEmail,
-    this.clientIp,
-    this.countryIpName,
-    this.countryIpAddress,
-    this.countryIpCode,
-    this.osServerVersion,
-    this.accessToken,
-    required this.hmacSigningKey,
-    required this.encryptionKey,
-    required this.isrJSONString,
-    required this.globalKey,
-    required this.magicNumber,
-    required this.timeHeader,
-    required this.apiKey,
-  });
-
-  /// Creates metadata with default values for optional fields.
-  factory AOTAuthorizationInterceptorClientMetadataOptions.withDefaults({
-    required String userId,
-    required String userEmail,
-    required String accessToken,
-    required String hmacSigningKey,
-    required String encryptionKey,
-    required String globalKey,
-    required String magicNumber,
-    required String timeHeader,
-    required String apiKey,
-  }) {
-    return AOTAuthorizationInterceptorClientMetadataOptions(
-      os: '8daf5be6-a57a-4f21-b23e-ac6c2e612e27', // Default OS identifier
-      userId: userId,
-      userEmail: userEmail,
-      clientIp: '127.0.0.1',
-      countryIpName: 'United States',
-      countryIpAddress: '127.0.0.1',
-      countryIpCode: 'US',
-      osServerVersion: "12.3.87-staging",
-      accessToken: accessToken,
-      hmacSigningKey: hmacSigningKey,
-      encryptionKey: encryptionKey,
-      isrJSONString: '{}', // Empty ISR for client usage
-      globalKey: globalKey,
-      magicNumber: magicNumber,
-      timeHeader: timeHeader,
-      apiKey: apiKey,
-    );
-  }
 }
