@@ -22,8 +22,8 @@ import 'metadata.dart' show AOTAuthorizationInterceptorClientMetadataOptions;
 
 /// Exception thrown when authentication is required but not available.
 class AOTAuthenticationRequired implements Exception {
-  final String cause;
   AOTAuthenticationRequired(this.cause);
+  final String cause;
 
   @override
   String toString() => 'AOTAuthenticationRequired: $cause';
@@ -51,6 +51,13 @@ class AOTAuthenticationRequired implements Exception {
 /// final client = YourServiceClient(channel, interceptors: [interceptor]);
 /// ```
 class SecureAOTAuthorizationInterceptor extends ClientInterceptor {
+  SecureAOTAuthorizationInterceptor({
+    required this.clientMetadata,
+    required this.signingKey,
+    required this.jwtKey,
+    required this.encryptionKey,
+  });
+
   /// Client metadata containing auth tokens and keys.
   AOTAuthorizationInterceptorClientMetadataOptions clientMetadata;
 
@@ -64,14 +71,7 @@ class SecureAOTAuthorizationInterceptor extends ClientInterceptor {
   final SecretKey jwtKey;
 
   /// UUID generator for nonces and request IDs.
-  final Uuid _uuid = const Uuid();
-
-  SecureAOTAuthorizationInterceptor({
-    required this.clientMetadata,
-    required this.signingKey,
-    required this.jwtKey,
-    required this.encryptionKey,
-  });
+  final _uuid = const Uuid();
 
   @override
   ResponseFuture<R> interceptUnary<Q, R>(
@@ -90,12 +90,12 @@ class SecureAOTAuthorizationInterceptor extends ClientInterceptor {
     }
 
     // Derive encryption keys
-    final encryptedJWTKey = sha256.convert(utf8.encode(jwtKey.key + clientMetadata.globalKey + 'jwt_key')).toString();
+    final encryptedJWTKey = sha256.convert(utf8.encode('${jwtKey.key}${clientMetadata.globalKey}jwt_key')).toString();
     final encryptedSigningKey = sha256
-        .convert(utf8.encode(signingKey + clientMetadata.globalKey + 'signing_key'))
+        .convert(utf8.encode('$signingKey${clientMetadata.globalKey}signing_key'))
         .toString();
     final encryptedEncryptionKey = sha256
-        .convert(utf8.encode(encryptionKey + clientMetadata.globalKey + 'encryption_key'))
+        .convert(utf8.encode('$encryptionKey${clientMetadata.globalKey}encryption_key'))
         .toString();
 
     // Prepare metadata - START WITH EXISTING METADATA FROM CallOptions
@@ -182,12 +182,12 @@ class SecureAOTAuthorizationInterceptor extends ClientInterceptor {
     }
 
     // Derive encryption keys
-    final encryptedJWTKey = sha256.convert(utf8.encode(jwtKey.key + clientMetadata.globalKey + 'jwt_key')).toString();
+    final encryptedJWTKey = sha256.convert(utf8.encode('${jwtKey.key}${clientMetadata.globalKey}jwt_key')).toString();
     final encryptedSigningKey = sha256
-        .convert(utf8.encode(signingKey + clientMetadata.globalKey + 'signing_key'))
+        .convert(utf8.encode('$signingKey${clientMetadata.globalKey}signing_key'))
         .toString();
     final encryptedEncryptionKey = sha256
-        .convert(utf8.encode(encryptionKey + clientMetadata.globalKey + 'encryption_key'))
+        .convert(utf8.encode('$encryptionKey${clientMetadata.globalKey}encryption_key'))
         .toString();
 
     // Generate security identifiers

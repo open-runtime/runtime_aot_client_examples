@@ -176,11 +176,7 @@ void main() {
       // NOTE: This service requires VPN connection (aot.runtime.services)
       const serviceHost = 'runtime-native-io-aws-bedrock-inference-grpc-service.aot.runtime.services';
 
-      channel = ClientChannel(
-        serviceHost,
-        port: 443,
-        options: const ChannelOptions(credentials: ChannelCredentials.secure()),
-      );
+      channel = ClientChannel(serviceHost);
 
       client = AWSBedrockInferenceServiceClient(channel, interceptors: [auth.interceptor]);
 
@@ -269,7 +265,7 @@ void main() {
               errorMsg.contains('credential')) {
             print('⏭️ Skipping: AWS Bedrock credentials not configured for this org');
             print('   Error: $errorMsg');
-            print('   This is expected if your organization doesn\'t have Voxtral access.');
+            print("   This is expected if your organization doesn't have Voxtral access.");
             return; // Skip test gracefully
           }
           print('❌ Request failed: $errorMsg');
@@ -277,12 +273,12 @@ void main() {
         }
       } on GrpcError catch (e) {
         // Check for known access/credential issues
-        if (e.message?.contains('No element') == true ||
-            e.message?.contains('not authorized') == true ||
-            e.message?.contains('credential') == true) {
+        if ((e.message?.contains('No element') ?? false) ||
+            (e.message?.contains('not authorized') ?? false) ||
+            (e.message?.contains('credential') ?? false)) {
           print('⏭️ Skipping: AWS Bedrock credentials not configured for this org');
           print('   gRPC Error: ${e.message}');
-          print('   This is expected if your organization doesn\'t have Voxtral access.');
+          print("   This is expected if your organization doesn't have Voxtral access.");
           return; // Skip test gracefully
         }
         rethrow;
@@ -364,9 +360,9 @@ void main() {
         }
       } on GrpcError catch (e) {
         // Check for known access/credential issues
-        if (e.message?.contains('No element') == true ||
-            e.message?.contains('not authorized') == true ||
-            e.message?.contains('credential') == true) {
+        if ((e.message?.contains('No element') ?? false) ||
+            (e.message?.contains('not authorized') ?? false) ||
+            (e.message?.contains('credential') ?? false)) {
           print('⏭️ Skipping: AWS Bedrock credentials not configured for this org');
           print('   gRPC Error: ${e.message}');
           return; // Skip test gracefully

@@ -50,6 +50,14 @@ import '../interceptor/secure_interceptor.dart' show SecureAOTAuthorizationInter
 /// await channel.shutdown();
 /// ```
 class AuthenticatedAOTClient {
+  AuthenticatedAOTClient._({
+    required SecureAOTAuthorizationInterceptor interceptor,
+    required this.orgId,
+    required this.userEmail,
+    required this.userId,
+    required this.accessToken,
+  }) : _interceptor = interceptor;
+
   /// The secure gRPC interceptor for authenticated requests.
   final SecureAOTAuthorizationInterceptor _interceptor;
 
@@ -64,14 +72,6 @@ class AuthenticatedAOTClient {
 
   /// The Descope access token.
   final String accessToken;
-
-  AuthenticatedAOTClient._({
-    required SecureAOTAuthorizationInterceptor interceptor,
-    required this.orgId,
-    required this.userEmail,
-    required this.userId,
-    required this.accessToken,
-  }) : _interceptor = interceptor;
 
   /// Creates an authenticated AOT client.
   ///

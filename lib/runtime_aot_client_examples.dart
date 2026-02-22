@@ -48,21 +48,19 @@
 /// 1. **Dart SDK 3.9+**
 /// 2. **GCP credentials**: Run `gcloud auth application-default login`
 /// 3. **Pieces account**: For Descope authentication
-library runtime_aot_client_examples;
-
-// Main API
-export 'src/client/authenticated_client.dart' show AuthenticatedAOTClient;
-
-// Interceptor (for advanced usage)
-export 'src/interceptor/secure_interceptor.dart' show SecureAOTAuthorizationInterceptor, AOTAuthenticationRequired;
-export 'src/interceptor/metadata.dart' show AOTAuthorizationInterceptorClientMetadataOptions;
-
-// Auth utilities (for advanced usage)
-export 'src/auth/browser_auth.dart' show getDescopeAccessTokenViaBrowser, getDescopeUserInfo, descopeProjectId;
-export 'src/auth/token_cache.dart' show TokenCache, logTokenCacheStatus;
-export 'src/auth/user_service.dart'
-    show fetchUserDataFromService, fetchOrgIdFromAotEndpoint, extractUserKeys, defaultUserTeamServiceUrl;
-export 'src/auth/secret_fetcher.dart' show SecretFetcher;
+library;
 
 // Re-export grpc types for convenience
-export 'package:grpc/grpc.dart' show ClientChannel, ChannelOptions, ChannelCredentials, CallOptions;
+export 'package:grpc/grpc.dart' show CallOptions, ChannelCredentials, ChannelOptions, ClientChannel;
+
+// Auth utilities (for advanced usage)
+export 'src/auth/browser_auth.dart' show descopeProjectId, getDescopeAccessTokenViaBrowser, getDescopeUserInfo;
+export 'src/auth/secret_fetcher.dart' show SecretFetcher;
+export 'src/auth/token_cache.dart' show TokenCache, logTokenCacheStatus;
+export 'src/auth/user_service.dart'
+    show defaultUserTeamServiceUrl, extractUserKeys, fetchOrgIdFromAotEndpoint, fetchUserDataFromService;
+// Main API
+export 'src/client/authenticated_client.dart' show AuthenticatedAOTClient;
+export 'src/interceptor/metadata.dart' show AOTAuthorizationInterceptorClientMetadataOptions;
+// Interceptor (for advanced usage)
+export 'src/interceptor/secure_interceptor.dart' show AOTAuthenticationRequired, SecureAOTAuthorizationInterceptor;
