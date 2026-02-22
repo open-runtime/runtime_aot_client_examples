@@ -8,7 +8,7 @@ import 'package:crypto/crypto.dart' show sha256;
 import 'package:http/http.dart' as http;
 
 /// Default Descope project ID for Pieces authentication.
-const descopeProjectId = 'P2pgKajh2ElmCO6p7ioSPSpS6qev';
+const String descopeProjectId = 'P2pgKajh2ElmCO6p7ioSPSpS6qev';
 
 /// Fetches a Descope access token through web browser authentication using PKCE flow.
 ///
@@ -80,8 +80,7 @@ Future<String> getDescopeAccessTokenViaBrowser({
   request.response
     ..statusCode = 200
     ..headers.set('content-type', 'text/html; charset=utf-8')
-    ..write('''
-<!DOCTYPE html>
+    ..write('''<!DOCTYPE html>
 <html>
 <head>
   <title>Authentication Successful</title>

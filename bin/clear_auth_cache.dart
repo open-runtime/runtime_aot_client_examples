@@ -8,7 +8,6 @@
 ///
 /// Or directly:
 ///   dart bin/clear_auth_cache.dart
-library;
 
 import 'package:runtime_aot_client_examples/runtime_aot_client_examples.dart';
 

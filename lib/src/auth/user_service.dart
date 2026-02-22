@@ -5,7 +5,7 @@ import 'dart:convert' show json;
 import 'package:http/http.dart' as http;
 
 /// Production user team service URL for fetching user/org data.
-const defaultUserTeamServiceUrl = 'https://user-team-service-226509373556.us-central1.run.app';
+const String defaultUserTeamServiceUrl = 'https://user-team-service-226509373556.us-central1.run.app';
 
 /// Fetches user data from the user team service.
 ///
@@ -23,9 +23,9 @@ const defaultUserTeamServiceUrl = 'https://user-team-service-226509373556.us-cen
 /// - apiKeys: Array of 13 encryption keys
 /// - Other user properties
 Future<Map<String, dynamic>> fetchUserDataFromService({
+  String? userTeamServiceUrl,
   required String userId,
   required String accessToken,
-  String? userTeamServiceUrl,
   bool useGlobalIdEndpoint = false,
 }) async {
   final effectiveUrl = userTeamServiceUrl ?? defaultUserTeamServiceUrl;
@@ -178,9 +178,9 @@ List<String> extractUserKeys(Map<String, dynamic> userData) {
 ///
 /// Returns a list of 13 encryption keys.
 Future<List<String>> fetchUserKeysFromService({
+  String? userTeamServiceUrl,
   required String userId,
   required String accessToken,
-  String? userTeamServiceUrl,
   bool useGlobalIdEndpoint = false,
 }) async {
   // First fetch the complete user data
@@ -200,7 +200,7 @@ Future<List<String>> fetchUserKeysFromService({
     print('🔄 Fetching user data again using global ID: $globalId');
     final globalUserData = await fetchUserDataFromService(
       userTeamServiceUrl: userTeamServiceUrl,
-      userId: globalId as String,
+      userId: globalId,
       accessToken: accessToken,
       useGlobalIdEndpoint: true,
     );

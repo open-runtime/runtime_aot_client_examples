@@ -6,10 +6,10 @@ import 'package:googleapis/secretmanager/v1.dart' show SecretManagerApi;
 import 'package:googleapis_auth/auth_io.dart' show clientViaApplicationDefaultCredentials;
 
 /// GCP project ID containing AOT secrets.
-const _defaultGcpProjectId = 'pi3c3s-cloud-server';
+const String _defaultGcpProjectId = 'pi3c3s-cloud-server';
 
 /// Scopes required for Secret Manager access.
-const _secretManagerScopes = <String>['https://www.googleapis.com/auth/cloud-platform'];
+const List<String> _secretManagerScopes = ['https://www.googleapis.com/auth/cloud-platform'];
 
 /// Fetches secrets from Google Cloud Secret Manager.
 ///
@@ -32,14 +32,14 @@ const _secretManagerScopes = <String>['https://www.googleapis.com/auth/cloud-pla
 /// final apiKey = await fetcher.fetch('aot_grpc_api_key');
 /// ```
 class SecretFetcher {
-  SecretFetcher._({required this.projectId, required SecretManagerApi secretManagerApi})
-    : _secretManagerApi = secretManagerApi;
-
   /// The GCP project ID containing the secrets.
   final String projectId;
 
   /// The Secret Manager API client.
   late final SecretManagerApi _secretManagerApi;
+
+  SecretFetcher._({required this.projectId, required SecretManagerApi secretManagerApi})
+    : _secretManagerApi = secretManagerApi;
 
   /// Creates a SecretFetcher with Application Default Credentials.
   ///

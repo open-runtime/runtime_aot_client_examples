@@ -1,11 +1,2 @@
-# Dart build artifacts
-.dart_tool/
-.packages
-pubspec.lock
-build/
-
 # Runtime CI audit trails (local only)
 .runtime_ci/runs/
-
-# CI/CD local run audit trails
-.cicd_runs/
