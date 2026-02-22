@@ -1,0 +1,77 @@
+{
+  "version": "1.0.0",
+  "gemini_model": "gemini-3.1-pro-preview",
+  "max_concurrent": 4,
+  "modules": [
+    {
+      "id": "auth",
+      "name": "Auth",
+      "source_paths": [
+        "lib/src/auth/"
+      ],
+      "lib_paths": [
+        "lib/src/auth/"
+      ],
+      "output_path": "docs/auth/",
+      "generate": [
+        "quickstart",
+        "api_reference"
+      ],
+      "hash": "",
+      "last_updated": null
+    },
+    {
+      "id": "client",
+      "name": "Client",
+      "source_paths": [
+        "lib/src/client/"
+      ],
+      "lib_paths": [
+        "lib/src/client/"
+      ],
+      "output_path": "docs/client/",
+      "generate": [
+        "quickstart",
+        "api_reference"
+      ],
+      "hash": "",
+      "last_updated": null
+    },
+    {
+      "id": "interceptor",
+      "name": "Interceptor",
+      "source_paths": [
+        "lib/src/interceptor/"
+      ],
+      "lib_paths": [
+        "lib/src/interceptor/"
+      ],
+      "output_path": "docs/interceptor/",
+      "generate": [
+        "quickstart",
+        "api_reference"
+      ],
+      "hash": "",
+      "last_updated": null
+    },
+    {
+      "id": "top_level",
+      "name": "Package Entry Points",
+      "source_paths": [
+        "lib/"
+      ],
+      "lib_paths": [],
+      "output_path": "docs/",
+      "generate": [
+        "quickstart"
+      ],
+      "hash": "",
+      "last_updated": null
+    }
+  ],
+  "templates": {
+    "quickstart": "scripts/prompts/autodoc_quickstart_prompt.dart",
+    "api_reference": "scripts/prompts/autodoc_api_reference_prompt.dart",
+    "examples": "scripts/prompts/autodoc_examples_prompt.dart"
+  }
+}
