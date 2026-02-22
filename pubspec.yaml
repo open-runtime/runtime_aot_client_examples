@@ -41,7 +41,7 @@ dependencies:
   # ==========================================================================
   encrypt:
     git:
-      url: git@github.com:open-runtime/encrypt.git
+      url: git@github.com:pieces-app/encrypt.git
       tag_pattern: v{{version}}
     version: ^5.1.6
   grpc:
