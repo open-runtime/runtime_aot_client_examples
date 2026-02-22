@@ -10,6 +10,7 @@
 /// 2. Have a Pieces account with enterprise access (AWS Bedrock is enterprise-only)
 ///
 /// Run with: dart test test/voxtral_test.dart
+@Tags(['integration'])
 @Timeout(Duration(minutes: 3))
 library;
 
