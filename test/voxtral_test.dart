@@ -15,7 +15,7 @@
 @Timeout(Duration(minutes: 3))
 library;
 
-import 'dart:io' show Directory, File;
+import 'dart:io' show Directory, File, Platform;
 
 import 'package:grpc/grpc.dart' show GrpcError;
 import 'package:runtime_aot_client_examples/runtime_aot_client_examples.dart';
@@ -152,7 +152,22 @@ List<String> _wrapText(String text, int maxWidth) {
   return lines;
 }
 
+bool _isCiOrCloudRun() {
+  final env = Platform.environment;
+  final ciValue = env['CI']?.toLowerCase();
+
+  return ciValue == 'true' ||
+      env.containsKey('K_SERVICE') || // Cloud Run
+      env.containsKey('PROJECT_ID') ||
+      env.containsKey('GCP_PROJECT_ID');
+}
+
 void main() {
+  // This test requires ADC creds + access to services behind VPN; skip in CI by default.
+  final skipReason = _isCiOrCloudRun()
+      ? 'Skipping Voxtral integration tests in CI (requires gcloud ADC + VPN + org access).'
+      : null;
+
   group('Voxtral Audio Transcription Tests', () {
     late AuthenticatedAOTClient auth;
     late ClientChannel channel;
@@ -372,5 +387,5 @@ void main() {
         rethrow;
       }
     });
-  });
+  }, skip: skipReason);
 }
