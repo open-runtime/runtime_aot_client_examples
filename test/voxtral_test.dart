@@ -154,18 +154,20 @@ List<String> _wrapText(String text, int maxWidth) {
 
 bool _isCiOrCloudRun() {
   final env = Platform.environment;
-  final ciValue = env['CI']?.toLowerCase();
+  final ciValue = (env['CI'] ?? '').toLowerCase();
+  // Different CI systems use different truthy values (e.g. "true", "1").
+  final isCi = ciValue.isNotEmpty && ciValue != 'false' && ciValue != '0';
 
-  return ciValue == 'true' ||
-      env.containsKey('K_SERVICE') || // Cloud Run
-      env.containsKey('PROJECT_ID') ||
-      env.containsKey('GCP_PROJECT_ID');
+  final isGitHubActions = (env['GITHUB_ACTIONS'] ?? '').toLowerCase() == 'true';
+  final isCloudRun = env.containsKey('K_SERVICE'); // Cloud Run
+
+  return isCi || isGitHubActions || isCloudRun;
 }
 
 void main() {
   // This test requires ADC creds + access to services behind VPN; skip in CI by default.
   final skipReason = _isCiOrCloudRun()
-      ? 'Skipping Voxtral integration tests in CI (requires gcloud ADC + VPN + org access).'
+      ? 'Skipping Voxtral integration tests in CI/Cloud Run (requires gcloud ADC + VPN + org access).'
       : null;
 
   group('Voxtral Audio Transcription Tests', () {
