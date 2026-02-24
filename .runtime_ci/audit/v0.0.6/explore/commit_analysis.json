@@ -1,0 +1,62 @@
+{
+  "version": "0.0.6",
+  "previous_version": "v0.0.5",
+  "total_commits": 9,
+  "categories": {
+    "added": [
+      {
+        "description": "Added 'examples' to auto-documentation generation targets for auth, client, and interceptor modules",
+        "pr": null,
+        "commits": ["807ade9"]
+      },
+      {
+        "description": "Added auto-format job to the CI workflow to enforce dart formatting conventions",
+        "pr": null,
+        "commits": ["59022bf"]
+      }
+    ],
+    "changed": [
+      {
+        "description": "Bumped runtime_ci_tooling dev dependency to ^0.12.0",
+        "pr": null,
+        "commits": ["5b9fb97"]
+      },
+      {
+        "description": "Refactored Voxtral tests to be CI-safe unit tests instead of live gRPC integration tests",
+        "pr": null,
+        "commits": ["cd4b73c"]
+      },
+      {
+        "description": "Updated CI workflow templates and configuration via manage_cicd update-all",
+        "pr": null,
+        "commits": ["807ade9", "d8a0490", "f55bdc5", "fbe3cb7"]
+      },
+      {
+        "description": "Aligned runtime_ci_tooling dependency to ^0.10.0 for external package enable-all flow compatibility",
+        "pr": null,
+        "commits": ["9dd9b20"]
+      },
+      {
+        "description": "Merged branch 'feat/enterprise-byok-runtime-ci-sync'",
+        "pr": null,
+        "commits": ["3a83d79"]
+      }
+    ],
+    "deprecated": [],
+    "removed": [
+      {
+        "description": "Removed GIT_LFS_SKIP_SMUDGE env variables from CI workflow pre-checks",
+        "pr": null,
+        "commits": ["807ade9"]
+      }
+    ],
+    "fixed": [
+      {
+        "description": "Fixed the create-release pull --rebase failure related to unstaged changes by picking up runtime_ci_tooling v0.12.1",
+        "pr": null,
+        "commits": ["5b9fb97"]
+      }
+    ],
+    "security": []
+  }
+}

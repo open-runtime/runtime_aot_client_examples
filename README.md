@@ -127,14 +127,12 @@ You can also manually delete this file.
 
 ## Running Tests
 
-The package includes a Voxtral audio transcription test:
+The package includes CI-safe unit tests for verifying audio transcription request construction:
 
 ```bash
-# Run the Voxtral test (requires enterprise access)
+# Run the Voxtral request construction tests
 dart test test/voxtral_test.dart
 ```
-
-The test uses `test/assets/test_speech.wav` - a short speech sample for transcription testing.
 
 ## Troubleshooting
 

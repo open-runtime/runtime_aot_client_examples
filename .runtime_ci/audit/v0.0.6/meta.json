@@ -1,0 +1,82 @@
+{
+  "command": "merged-audit",
+  "started_at": "2026-02-24T02:26:50.158850",
+  "merged_from": [
+    {
+      "artifact": "cicd-audit-explore",
+      "command": "explore",
+      "args": [],
+      "started_at": "2026-02-24T02:15:49.029025",
+      "pid": 2772,
+      "platform": "linux",
+      "dart_version": "3.9.2",
+      "repo_root": "/home/runner/work/runtime_aot_client_examples/runtime_aot_client_examples",
+      "run_dir": "/home/runner/work/runtime_aot_client_examples/runtime_aot_client_examples/.runtime_ci/runs/run_2026-02-24T02-15-49_2772",
+      "ci": true,
+      "completed_at": "2026-02-24T02:18:29.301954",
+      "duration_seconds": 160,
+      "exit_code": 0,
+      "artifacts": [
+        "explore/prompt.txt",
+        "explore/gemini_response.json",
+        "meta.json"
+      ]
+    },
+    {
+      "artifact": "cicd-audit-release-notes",
+      "command": "release-notes",
+      "args": [],
+      "started_at": "2026-02-24T02:23:55.612738",
+      "pid": 2776,
+      "platform": "linux",
+      "dart_version": "3.9.2",
+      "repo_root": "/home/runner/work/runtime_aot_client_examples/runtime_aot_client_examples",
+      "run_dir": "/home/runner/work/runtime_aot_client_examples/runtime_aot_client_examples/.runtime_ci/runs/run_2026-02-24T02-23-55_2776",
+      "ci": true,
+      "completed_at": "2026-02-24T02:26:17.402436",
+      "duration_seconds": 141,
+      "artifacts": [
+        "release-notes/prompt.txt",
+        "release-notes/release_notes.md",
+        "release-notes/gemini_response.json",
+        "meta.json"
+      ]
+    },
+    {
+      "artifact": "cicd-audit-compose",
+      "command": "compose",
+      "args": [],
+      "started_at": "2026-02-24T02:19:31.145803",
+      "pid": 2764,
+      "platform": "linux",
+      "dart_version": "3.9.2",
+      "repo_root": "/home/runner/work/runtime_aot_client_examples/runtime_aot_client_examples",
+      "run_dir": "/home/runner/work/runtime_aot_client_examples/runtime_aot_client_examples/.runtime_ci/runs/run_2026-02-24T02-19-31_2764",
+      "ci": true,
+      "completed_at": "2026-02-24T02:20:51.247487",
+      "duration_seconds": 80,
+      "artifacts": [
+        "compose/prompt.txt",
+        "compose/gemini_response.json",
+        "meta.json"
+      ]
+    },
+    {
+      "artifact": "cicd-audit-compose",
+      "command": "documentation",
+      "args": [],
+      "started_at": "2026-02-24T02:20:51.706537",
+      "pid": 5016,
+      "platform": "linux",
+      "dart_version": "3.9.2",
+      "repo_root": "/home/runner/work/runtime_aot_client_examples/runtime_aot_client_examples",
+      "run_dir": "/home/runner/work/runtime_aot_client_examples/runtime_aot_client_examples/.runtime_ci/runs/run_2026-02-24T02-20-51_5016",
+      "ci": true
+    }
+  ],
+  "artifact_count": 5,
+  "total_files": 17,
+  "ci": true,
+  "platform": "linux",
+  "dart_version": "3.9.2"
+}

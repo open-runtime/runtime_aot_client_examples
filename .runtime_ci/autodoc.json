@@ -18,8 +18,8 @@
         "api_reference",
         "examples"
       ],
-      "hash": "",
-      "last_updated": null
+      "hash": "40eccae8e3b0d1e89068d12b32887e7fae36e1cef287f5ebc6b8da229488bf70",
+      "last_updated": "2026-02-24T02:22:41.753653Z"
     },
     {
       "id": "client",
@@ -36,8 +36,8 @@
         "api_reference",
         "examples"
       ],
-      "hash": "",
-      "last_updated": null
+      "hash": "b732e10c38a675822111fe49a5060034ac2f51fe287392131bc78846dc253c2d",
+      "last_updated": "2026-02-24T02:22:41.761374Z"
     },
     {
       "id": "interceptor",
@@ -54,8 +54,8 @@
         "api_reference",
         "examples"
       ],
-      "hash": "",
-      "last_updated": null
+      "hash": "e2d7ef5c7183037a41acd9d445407234b40c4115b62cecd514cacdc54b1af96c",
+      "last_updated": "2026-02-24T02:22:41.767491Z"
     },
     {
       "id": "top_level",
@@ -68,8 +68,8 @@
       "generate": [
         "quickstart"
       ],
-      "hash": "",
-      "last_updated": null
+      "hash": "a7516636b0965f6285883915f668ff2fb31a5d4adb5f67beac0ec2ac971eeeb3",
+      "last_updated": "2026-02-24T02:22:41.773558Z"
     }
   ],
   "templates": {
