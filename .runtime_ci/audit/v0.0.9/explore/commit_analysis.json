@@ -1,0 +1,21 @@
+{
+  "version": "0.0.9",
+  "previous_version": "v0.0.8",
+  "total_commits": 1,
+  "categories": {
+    "added": [],
+    "changed": [],
+    "deprecated": [],
+    "removed": [],
+    "fixed": [
+      {
+        "description": "Corrected the organization URL for the `encrypt` dependency and updated `encrypt` to version `^6.0.0` and `runtime_isomorphic_library` to version `^2.0.0`.",
+        "pr": null,
+        "commits": [
+          "cda92e0"
+        ]
+      }
+    ],
+    "security": []
+  }
+}

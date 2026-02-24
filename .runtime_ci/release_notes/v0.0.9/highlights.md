@@ -1,0 +1,3 @@
+- Corrected the organization URL for the `encrypt` dependency from `pieces-app` to `open-runtime`.
+- Bumped the `encrypt` package dependency version to `^6.0.0`.
+- Bumped the `runtime_isomorphic_library` package dependency version to `^2.0.0`.
