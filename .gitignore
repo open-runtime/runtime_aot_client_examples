@@ -1,2 +1,8 @@
 # Runtime CI audit trails (local only)
 .runtime_ci/runs/
+
+# Dart build artifacts
+.dart_tool/
+
+# Claude AI session data
+.claude/
