@@ -1,0 +1,19 @@
+{
+  "version": "0.0.8",
+  "previous_version": "v0.0.7",
+  "total_commits": 1,
+  "categories": {
+    "added": [],
+    "changed": [
+      {
+        "description": "Update .gitignore with custom_lint.log, .dart_tool/, and .claude/ entries",
+        "pr": null,
+        "commits": ["6b56d22"]
+      }
+    ],
+    "deprecated": [],
+    "removed": [],
+    "fixed": [],
+    "security": []
+  }
+}

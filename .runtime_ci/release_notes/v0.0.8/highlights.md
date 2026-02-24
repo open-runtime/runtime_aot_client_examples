@@ -1,0 +1,1 @@
+- Updated `.gitignore` to exclude Dart build artifacts and local AI session data.

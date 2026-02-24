@@ -11,7 +11,7 @@ description: |
   - VPN connection for user-team-service access
   - A Pieces account for Descope authentication
 
-version: 0.0.7
+version: 0.0.8
 publish_to: none
 
 environment:
