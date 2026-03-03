@@ -49,7 +49,7 @@ dependencies:
     git:
       url: git@github.com:open-runtime/runtime_isomorphic_library.git
       tag_pattern: v{{version}}
-    version: ^3.0.0
+    version: ^4.0.0
   runtime_mindfck:
     git:
       url: git@github.com:open-runtime/mindfck.git
