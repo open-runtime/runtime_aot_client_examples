@@ -1,0 +1,3 @@
+- Aligned `grpc` (grpc-dart) dependency constraint post-merge to `^5.3.8`.
+- Bumped `runtime_isomorphic_library` dependency from `^2.0.0` to `^4.0.0`.
+- Updated `runtime_ci_tooling` dev dependency to `^0.14.1`.

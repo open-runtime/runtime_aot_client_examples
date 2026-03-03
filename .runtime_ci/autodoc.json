@@ -18,8 +18,8 @@
         "api_reference",
         "examples"
       ],
-      "hash": "40eccae8e3b0d1e89068d12b32887e7fae36e1cef287f5ebc6b8da229488bf70",
-      "last_updated": "2026-02-24T02:22:41.753653Z"
+      "hash": "0fcb817d6631aca6301f681016f47e47ee6c0c56bc9ce21dd8534b83a3744598",
+      "last_updated": "2026-03-03T16:04:43.826020Z"
     },
     {
       "id": "client",
@@ -36,8 +36,8 @@
         "api_reference",
         "examples"
       ],
-      "hash": "b732e10c38a675822111fe49a5060034ac2f51fe287392131bc78846dc253c2d",
-      "last_updated": "2026-02-24T02:22:41.761374Z"
+      "hash": "778a1987015da1436a0af8cce712005198b8de29c5b307ee76a16203b6136d29",
+      "last_updated": "2026-03-03T16:04:43.829064Z"
     },
     {
       "id": "interceptor",
@@ -54,8 +54,8 @@
         "api_reference",
         "examples"
       ],
-      "hash": "e2d7ef5c7183037a41acd9d445407234b40c4115b62cecd514cacdc54b1af96c",
-      "last_updated": "2026-02-24T02:22:41.767491Z"
+      "hash": "d3199305f221930e291872c001d607e486278fe7acbf132936ab0f3b3b117e87",
+      "last_updated": "2026-03-03T16:04:43.829942Z"
     },
     {
       "id": "top_level",
@@ -68,8 +68,8 @@
       "generate": [
         "quickstart"
       ],
-      "hash": "a7516636b0965f6285883915f668ff2fb31a5d4adb5f67beac0ec2ac971eeeb3",
-      "last_updated": "2026-02-24T02:22:41.773558Z"
+      "hash": "a20a2308948726969a65578be27454aac06b75a4feac9bd1830742da6ee5e67c",
+      "last_updated": "2026-03-03T16:04:43.831384Z"
     }
   ],
   "templates": {

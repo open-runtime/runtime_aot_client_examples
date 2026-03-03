@@ -1,0 +1,17 @@
+{
+  "version": "0.0.10",
+  "github_issues": [],
+  "sentry_issues": [],
+  "prs_referenced": [
+    {
+      "number": 2,
+      "title": "chore(deps): align post-merge dependency versions",
+      "author": "tsavo-at-pieces"
+    },
+    {
+      "number": 3,
+      "title": "chore: bump runtime_isomorphic_library to v4.0.0",
+      "author": "tsavo-at-pieces"
+    }
+  ]
+}

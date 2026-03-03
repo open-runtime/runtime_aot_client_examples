@@ -1,0 +1,26 @@
+{
+  "pull_requests": [
+    {
+      "number": 2,
+      "title": "chore(deps): align post-merge dependency versions",
+      "author": "tsavo-at-pieces",
+      "labels": [],
+      "summary": "Aligns dependency constraints with post-merge state, updating grpc-dart to ^5.3.8, runtime_isomorphic_library to ^3.0.0, and runtime_ci_tooling to ^0.14.1.",
+      "commits": [
+        "7edfecf49eab3099ddb061b74ca7a0e4df103d2e",
+        "c2c8782e1288596167c301d7d4ea92b05a2663e5"
+      ]
+    },
+    {
+      "number": 3,
+      "title": "chore: bump runtime_isomorphic_library to v4.0.0",
+      "author": "tsavo-at-pieces",
+      "labels": [],
+      "summary": "Bumps the dependency runtime_isomorphic_library from ^3.0.0 to ^4.0.0.",
+      "commits": [
+        "679e4ca9a51aedf530d209b5b87692ee61de4653",
+        "18d39228898aba9fed2664f7dcce0dfa93b89c42"
+      ]
+    }
+  ]
+}

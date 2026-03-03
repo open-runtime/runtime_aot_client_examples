@@ -1,0 +1,8 @@
+- **Decision**: patch. The changes are strictly chore and dependency updates in `pubspec.yaml`, with no public API additions, breakages, or functional changes.
+- **Key Changes**:
+  - Bumped `runtime_isomorphic_library` dependency to `^4.0.0`
+  - Bumped `grpc` dependency to `^5.3.8`
+  - Bumped `runtime_ci_tooling` dev dependency to `^0.14.1`
+- **References**:
+  - PR #3: chore: bump runtime_isomorphic_library to v4.0.0
+  - PR #2: chore(deps): align post-merge dependency versions
