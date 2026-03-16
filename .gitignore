@@ -1,3 +1,4 @@
+pubspec.lock
 # Runtime CI audit trails (local only)
 .runtime_ci/runs/
 
