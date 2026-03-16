@@ -1,0 +1,31 @@
+{
+  "version": "0.0.11",
+  "previous_version": "v0.0.10",
+  "total_commits": 1,
+  "categories": {
+    "added": [],
+    "changed": [
+      {
+        "description": "Inlined standalone lint baseline to replace workspace-only lint assumptions, enabling the package to resolve cleanly outside the unified monorepo.",
+        "pr": null,
+        "commits": ["1e78ed3cfaeb00d82d949d90d4d6afd2de269394"]
+      }
+    ],
+    "deprecated": [],
+    "removed": [
+      {
+        "description": "Removed runtime_common_codestyle from dev dependencies.",
+        "pr": null,
+        "commits": ["1e78ed3cfaeb00d82d949d90d4d6afd2de269394"]
+      }
+    ],
+    "fixed": [
+      {
+        "description": "Added pubspec.lock to .gitignore to prevent committing lockfiles.",
+        "pr": null,
+        "commits": ["1e78ed3cfaeb00d82d949d90d4d6afd2de269394"]
+      }
+    ],
+    "security": []
+  }
+}
