@@ -13,7 +13,7 @@
       "lib_paths": [
         "lib/src/auth/"
       ],
-      "output_path": "docs/auth/",
+      "output_path": "docs/auth",
       "generate": [
         "quickstart",
         "api_reference",
@@ -31,7 +31,7 @@
       "lib_paths": [
         "lib/src/client/"
       ],
-      "output_path": "docs/client/",
+      "output_path": "docs/client",
       "generate": [
         "quickstart",
         "api_reference",
@@ -49,7 +49,7 @@
       "lib_paths": [
         "lib/src/interceptor/"
       ],
-      "output_path": "docs/interceptor/",
+      "output_path": "docs/interceptor",
       "generate": [
         "quickstart",
         "api_reference",
@@ -65,7 +65,7 @@
         "lib/"
       ],
       "lib_paths": [],
-      "output_path": "docs/",
+      "output_path": "docs",
       "generate": [
         "quickstart"
       ],
