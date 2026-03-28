@@ -6,12 +6,14 @@ import 'package:grpc/grpc.dart' show CallOptions, ClientInterceptor;
 import 'package:runtime_mindfck/client.dart' show ClientAuthManager;
 
 import '../auth/browser_auth.dart' show getDescopeAccessTokenViaBrowser, getDescopeUserInfo;
+import '../auth/password_auth.dart' show authenticateProfile;
 import '../auth/secret_fetcher.dart' show SecretFetcher;
 import '../auth/token_cache.dart' show TokenCache;
 import '../auth/user_service.dart'
     show defaultUserTeamServiceUrl, extractUserKeys, fetchOrgIdFromAotEndpoint, fetchUserDataFromService;
 import '../interceptor/metadata.dart' show AOTAuthorizationInterceptorClientMetadataOptions;
 import '../interceptor/secure_interceptor.dart' show SecureAOTAuthorizationInterceptor;
+import '../profiles/test_profiles.dart' show TestProfile;
 
 /// High-level API for creating authenticated AOT clients.
 ///
@@ -57,6 +59,8 @@ class AuthenticatedAOTClient {
     required this.userEmail,
     required this.userId,
     required this.accessToken,
+    required this.selectedKey,
+    required this.userKeys,
   }) : _interceptor = interceptor;
 
   /// The secure gRPC interceptor for authenticated requests.
@@ -73,6 +77,13 @@ class AuthenticatedAOTClient {
 
   /// The Descope access token.
   final String accessToken;
+
+  /// The MindFck selectedKey — needed for decrypting provisioned credentials.
+  /// Key derivation: SHA256(selectedKey + jwt) -> AES-256-GCM decryption key.
+  final String selectedKey;
+
+  /// The user's 13 API keys from user-team-service.
+  final List<String> userKeys;
 
   /// Creates an authenticated AOT client.
   ///
@@ -217,6 +228,93 @@ class AuthenticatedAOTClient {
       userEmail: effectiveUserEmail,
       userId: globalUserId,
       accessToken: accessToken,
+      selectedKey: mindFckHeaders.selectedKey,
+      userKeys: userKeys,
+    );
+  }
+
+  /// Creates an authenticated client from a [TestProfile] using password auth.
+  ///
+  /// Unlike [create], this does not open a browser — it authenticates via
+  /// Descope password sign-in, making it suitable for CI and automation.
+  ///
+  /// When [orgIdOverride] is provided, it is used instead of the profile's
+  /// [TestProfile.orgId] or the dynamically-discovered first org.
+  static Future<AuthenticatedAOTClient> createFromProfile({
+    required TestProfile profile,
+    String? orgIdOverride,
+    String? userTeamServiceUrl,
+  }) async {
+    print('🔐 Starting AOT authentication for profile: ${profile.displayName}...');
+
+    await ClientAuthManager.initialize();
+
+    final secretFetcher = await SecretFetcher.create(projectId: 'global-cloud-runtime');
+    final secrets = await secretFetcher.fetchAOTSecrets();
+
+    final auth = await authenticateProfile(profile);
+
+    final effectiveServiceUrl = userTeamServiceUrl ?? defaultUserTeamServiceUrl;
+
+    final userData = await fetchUserDataFromService(
+      userTeamServiceUrl: effectiveServiceUrl,
+      userId: auth.userId,
+      accessToken: auth.sessionJwt,
+    );
+
+    final globalUserId =
+        userData['globalId']?.toString() ??
+        userData['global_id']?.toString() ??
+        userData['id']?.toString() ??
+        auth.userId;
+
+    final userKeys = extractUserKeys(userData);
+
+    final mindFckHeaders = await ClientAuthManager.generateRequestHeaders(userKeys: userKeys, userId: globalUserId);
+
+    String? orgId;
+    if (orgIdOverride != null) {
+      orgId = orgIdOverride;
+    } else if (profile.orgId != null) {
+      orgId = profile.orgId;
+    } else {
+      final orgData = await fetchOrgIdFromAotEndpoint(
+        accessToken: auth.sessionJwt,
+        userTeamServiceUrl: effectiveServiceUrl,
+      );
+      orgId = orgData.orgId;
+    }
+
+    final metadata = AOTAuthorizationInterceptorClientMetadataOptions.withDefaults(
+      userId: globalUserId,
+      userEmail: auth.email,
+      accessToken: auth.sessionJwt,
+      hmacSigningKey: secrets.hmacSigningKey,
+      encryptionKey: secrets.encryptionKey,
+      globalKey: mindFckHeaders.selectedKey,
+      magicNumber: mindFckHeaders.headers.magicNumber,
+      timeHeader: mindFckHeaders.headers.timeHeader,
+      apiKey: secrets.apiKey,
+    );
+
+    final interceptor = SecureAOTAuthorizationInterceptor(
+      clientMetadata: metadata,
+      signingKey: secrets.hmacSigningKey,
+      jwtKey: SecretKey(secrets.apiKey),
+      encryptionKey: secrets.encryptionKey,
+    );
+
+    print('✅ Authenticated ${profile.displayName} (${profile.subscription})');
+    if (orgId != null) print('   Org ID: $orgId');
+
+    return AuthenticatedAOTClient._(
+      interceptor: interceptor,
+      orgId: orgId,
+      userEmail: auth.email,
+      userId: globalUserId,
+      accessToken: auth.sessionJwt,
+      selectedKey: mindFckHeaders.selectedKey,
+      userKeys: userKeys,
     );
   }
 

@@ -1,60 +1,52 @@
 /// Self-contained AOT client library.
 ///
-/// This library provides everything needed to authenticate with AOT services
-/// and make authenticated gRPC requests. It handles:
+/// Provides everything needed to authenticate with AOT services, provision
+/// credentials, and make authenticated gRPC requests. Supports both
+/// browser-based OAuth and password-based authentication for test profiles.
 ///
-/// - Browser-based OAuth authentication with Descope
-/// - Token caching (55 minutes) to avoid repeated logins
-/// - Secure request signing and encryption
-/// - Organization ID fetching for enterprise features
-///
-/// ## Quick Start
+/// ## Quick Start — Browser Auth
 ///
 /// ```dart
 /// import 'package:runtime_aot_client_examples/runtime_aot_client_examples.dart';
-/// import 'package:runtime_isomorphic_library/machine_learning/parents/aws_bedrock/root/shared/services/service.pbgrpc.dart';
 ///
 /// void main() async {
-///   // 1. Create authenticated client (opens browser if needed)
 ///   final auth = await AuthenticatedAOTClient.create();
-///
-///   // 2. Create gRPC channel to the service
-///   final channel = ClientChannel(
-///     'your-service-url.run.app',
-///     port: 443,
-///     options: ChannelOptions(credentials: ChannelCredentials.secure()),
-///   );
-///
-///   // 3. Create service client with the auth interceptor
-///   final client = AWSBedrockInferenceServiceClient(
-///     channel,
-///     interceptors: [auth.interceptor],
-///   );
-///
-///   // 4. Make authenticated requests
-///   final response = await client.predict(
-///     request,
-///     options: auth.callOptionsWithOrgId,
-///   );
-///
-///   // 5. Clean up
+///   // Use auth.interceptor with any gRPC service client.
 ///   await auth.dispose();
-///   await channel.shutdown();
+/// }
+/// ```
+///
+/// ## Quick Start — Test Profile Provisioning
+///
+/// ```dart
+/// import 'package:runtime_aot_client_examples/runtime_aot_client_examples.dart';
+///
+/// void main() async {
+///   final auth = await AuthenticatedAOTClient.createFromProfile(
+///     profile: TestProfiles.enterpriseAllProviders,
+///   );
+///   final provisioner = ProvisioningClient(auth);
+///   final creds = await provisioner.provisionAll();
+///   print('OpenRouter: ${creds.openRouterApiKey}');
+///   print('Enterprise: ${creds.enterpriseCredentials.length} providers');
+///   await auth.dispose();
 /// }
 /// ```
 ///
 /// ## Prerequisites
 ///
 /// 1. **Dart SDK 3.9+**
-/// 2. **GCP credentials**: Run `gcloud auth application-default login`
-/// 3. **Pieces account**: For Descope authentication
+/// 2. **GCP credentials**: `gcloud auth application-default login`
+/// 3. **Pieces account**: For browser auth, or access to GSM test passwords
 library;
 
 // Re-export grpc types for convenience
 export 'package:grpc/grpc.dart' show CallOptions, ChannelCredentials, ChannelOptions, ClientChannel;
 
-// Auth utilities (for advanced usage)
+// Auth utilities
 export 'src/auth/browser_auth.dart' show descopeProjectId, getDescopeAccessTokenViaBrowser, getDescopeUserInfo;
+export 'src/auth/password_auth.dart'
+    show DescopePasswordAuthResult, authenticateDescopePassword, authenticateProfile, resolvePasswordForProfile;
 export 'src/auth/secret_fetcher.dart' show SecretFetcher;
 export 'src/auth/token_cache.dart' show TokenCache, logTokenCacheStatus;
 export 'src/auth/user_service.dart'
@@ -62,6 +54,13 @@ export 'src/auth/user_service.dart'
 
 // Main API
 export 'src/client/authenticated_client.dart' show AuthenticatedAOTClient;
+
+// Test profiles
+export 'src/profiles/test_profiles.dart' show TestProfile, TestProfiles;
+
+// Provisioning
+export 'src/provisioning/provisioning_client.dart'
+    show EnterpriseProviderCredentials, ProvisioningClient, ProvisioningResult;
 
 // Interceptor (for advanced usage)
 export 'src/interceptor/metadata.dart' show AOTAuthorizationInterceptorClientMetadataOptions;
