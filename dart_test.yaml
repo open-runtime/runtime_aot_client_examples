@@ -1,2 +1,6 @@
 tags:
   integration:
+
+presets:
+  integration:
+    include_tags: integration
