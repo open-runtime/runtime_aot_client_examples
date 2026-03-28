@@ -214,21 +214,15 @@ class ProvisioningClient {
             selectedUserKey: _auth.selectedKey,
             jwt: _auth.accessToken,
           );
-          enterpriseCreds.add(
-            EnterpriseProviderCredentials(
-              provider: cred.provider,
-              orgId: cred.orgId,
-              orgName: cred.orgName.isEmpty ? null : cred.orgName,
-              decryptedConfig: decrypted,
-            ),
-          );
-          final provName = EnterpriseProviderCredentials(
+          final enterpriseCred = EnterpriseProviderCredentials(
             provider: cred.provider,
             orgId: cred.orgId,
-            decryptedConfig: '',
-          ).providerName;
+            orgName: cred.orgName.isEmpty ? null : cred.orgName,
+            decryptedConfig: decrypted,
+          );
+          enterpriseCreds.add(enterpriseCred);
           print(
-            '  Enterprise $provName: decrypted '
+            '  Enterprise ${enterpriseCred.providerName}: decrypted '
             '(org: ${_mask(cred.orgId, prefix: 12, suffix: 4)})',
           );
         } catch (e) {

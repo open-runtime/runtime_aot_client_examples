@@ -56,16 +56,20 @@ AuthenticatedAOTClient? _auth(TestProfile p) => _authByProfileId[p.id];
 
 ProvisioningResult? _provisioned(TestProfile p) => _provisionedByProfileId[p.id];
 
-void _requireAuth(TestProfile p) {
-  if (_auth(p) == null) {
+AuthenticatedAOTClient? _requireAuth(TestProfile p) {
+  final auth = _auth(p);
+  if (auth == null) {
     markTestSkipped('Auth unavailable for ${p.id} (expected without GCP)');
   }
+  return auth;
 }
 
-void _requireProvisioned(TestProfile p) {
-  if (_provisioned(p) == null) {
+ProvisioningResult? _requireProvisioned(TestProfile p) {
+  final provisioned = _provisioned(p);
+  if (provisioned == null) {
     markTestSkipped('Provisioning unavailable for ${p.id} (expected without GCP)');
   }
+  return provisioned;
 }
 
 /// Creates a [SecretFetcher] for GSM lookups. Returns null if GCP auth fails.
@@ -207,8 +211,8 @@ void main() {
   group('Password auth per profile', () {
     for (final profile in TestProfiles.all) {
       test('${profile.id}: authenticates and returns userId + sessionJwt', () async {
-        _requireAuth(profile);
-        final auth = _auth(profile)!;
+        final auth = _requireAuth(profile);
+        if (auth == null) return;
 
         expect(auth.userId, isNotEmpty, reason: '${profile.id} userId');
         expect(auth.accessToken, isNotEmpty, reason: '${profile.id} jwt');
@@ -219,10 +223,10 @@ void main() {
     }
 
     test('alice and bob have different global IDs', () async {
-      _requireAuth(TestProfiles.alice);
-      _requireAuth(TestProfiles.bob);
-      final alice = _auth(TestProfiles.alice)!;
-      final bob = _auth(TestProfiles.bob)!;
+      final alice = _requireAuth(TestProfiles.alice);
+      if (alice == null) return;
+      final bob = _requireAuth(TestProfiles.bob);
+      if (bob == null) return;
 
       expect(alice.userId, isNot(equals(bob.userId)), reason: 'alice and bob must have different globalIds');
     });
@@ -230,8 +234,9 @@ void main() {
     test('enterprise profiles share a single globalId', () async {
       final ids = <String>{};
       for (final p in TestProfiles.enterprise) {
-        _requireAuth(p);
-        ids.add(_auth(p)!.userId);
+        final auth = _requireAuth(p);
+        if (auth == null) return;
+        ids.add(auth.userId);
       }
       expect(ids, hasLength(1), reason: 'same Descope user → same globalId');
     });
@@ -243,8 +248,8 @@ void main() {
   group('OpenRouter provisioning per profile', () {
     for (final profile in TestProfiles.all) {
       test('${profile.id}: receives valid sk-or- OpenRouter key', () async {
-        _requireProvisioned(profile);
-        final result = _provisioned(profile)!;
+        final result = _requireProvisioned(profile);
+        if (result == null) return;
 
         expect(result.openRouterApiKey, isNotEmpty, reason: '${profile.id} OR key');
         expect(result.openRouterApiKey, startsWith('sk-or-'), reason: '${profile.id} OR prefix');
@@ -252,19 +257,23 @@ void main() {
     }
 
     test('different enterprise orgIds produce different OpenRouter keys', () async {
-      _requireProvisioned(TestProfiles.enterpriseAllProviders);
-      _requireProvisioned(TestProfiles.enterpriseGaiStudioOnly);
-      final allKey = _provisioned(TestProfiles.enterpriseAllProviders)!.openRouterApiKey;
-      final gaiKey = _provisioned(TestProfiles.enterpriseGaiStudioOnly)!.openRouterApiKey;
+      final allResult = _requireProvisioned(TestProfiles.enterpriseAllProviders);
+      if (allResult == null) return;
+      final gaiResult = _requireProvisioned(TestProfiles.enterpriseGaiStudioOnly);
+      if (gaiResult == null) return;
+      final allKey = allResult.openRouterApiKey;
+      final gaiKey = gaiResult.openRouterApiKey;
 
       expect(allKey, isNot(equals(gaiKey)), reason: 'different orgIds → different OR keys');
     });
 
     test('free profiles produce keys distinct from enterprise', () async {
-      _requireProvisioned(TestProfiles.alice);
-      _requireProvisioned(TestProfiles.enterpriseAllProviders);
-      final aliceKey = _provisioned(TestProfiles.alice)!.openRouterApiKey;
-      final entKey = _provisioned(TestProfiles.enterpriseAllProviders)!.openRouterApiKey;
+      final aliceResult = _requireProvisioned(TestProfiles.alice);
+      if (aliceResult == null) return;
+      final enterpriseResult = _requireProvisioned(TestProfiles.enterpriseAllProviders);
+      if (enterpriseResult == null) return;
+      final aliceKey = aliceResult.openRouterApiKey;
+      final entKey = enterpriseResult.openRouterApiKey;
 
       expect(aliceKey, isNot(equals(entKey)), reason: 'free user key != enterprise key');
     });
@@ -275,8 +284,8 @@ void main() {
   // ===========================================================================
   group('Enterprise BYOK provisioning', () {
     test('enterpriseAllProviders: 5 providers (openai, claude, gemini, azure, bedrock)', () async {
-      _requireProvisioned(TestProfiles.enterpriseAllProviders);
-      final result = _provisioned(TestProfiles.enterpriseAllProviders)!;
+      final result = _requireProvisioned(TestProfiles.enterpriseAllProviders);
+      if (result == null) return;
       final names = result.enterpriseCredentials.map((c) => c.providerName).toSet();
 
       expect(names, contains('openai'));
@@ -288,8 +297,8 @@ void main() {
     });
 
     test('enterpriseGaiStudioOnly: gemini only', () async {
-      _requireProvisioned(TestProfiles.enterpriseGaiStudioOnly);
-      final result = _provisioned(TestProfiles.enterpriseGaiStudioOnly)!;
+      final result = _requireProvisioned(TestProfiles.enterpriseGaiStudioOnly);
+      if (result == null) return;
       final names = result.enterpriseCredentials.map((c) => c.providerName).toSet();
 
       expect(names, contains('gemini'));
@@ -297,32 +306,32 @@ void main() {
     });
 
     test('enterpriseVertexApiKeyOnly: gemini only', () async {
-      _requireProvisioned(TestProfiles.enterpriseVertexApiKeyOnly);
-      final result = _provisioned(TestProfiles.enterpriseVertexApiKeyOnly)!;
+      final result = _requireProvisioned(TestProfiles.enterpriseVertexApiKeyOnly);
+      if (result == null) return;
 
       expect(result.enterpriseCredentials, hasLength(1));
       expect(result.enterpriseCredentials.first.providerName, 'gemini');
     });
 
     test('enterpriseVertexSaOnly: gemini only', () async {
-      _requireProvisioned(TestProfiles.enterpriseVertexSaOnly);
-      final result = _provisioned(TestProfiles.enterpriseVertexSaOnly)!;
+      final result = _requireProvisioned(TestProfiles.enterpriseVertexSaOnly);
+      if (result == null) return;
 
       expect(result.enterpriseCredentials, hasLength(1));
       expect(result.enterpriseCredentials.first.providerName, 'gemini');
     });
 
     test('enterpriseVertexSaPlusKey: gemini only', () async {
-      _requireProvisioned(TestProfiles.enterpriseVertexSaPlusKey);
-      final result = _provisioned(TestProfiles.enterpriseVertexSaPlusKey)!;
+      final result = _requireProvisioned(TestProfiles.enterpriseVertexSaPlusKey);
+      if (result == null) return;
 
       expect(result.enterpriseCredentials, hasLength(1));
       expect(result.enterpriseCredentials.first.providerName, 'gemini');
     });
 
     test('enterpriseNoCredentials: zero enterprise providers', () async {
-      _requireProvisioned(TestProfiles.enterpriseNoCredentials);
-      final result = _provisioned(TestProfiles.enterpriseNoCredentials)!;
+      final result = _requireProvisioned(TestProfiles.enterpriseNoCredentials);
+      if (result == null) return;
 
       expect(result.enterpriseCredentials, isEmpty);
       expect(result.openRouterApiKey, startsWith('sk-or-'), reason: 'OpenRouter still works for empty-cred org');
@@ -330,14 +339,16 @@ void main() {
 
     test('free profiles have zero enterprise providers', () async {
       for (final p in TestProfiles.freePersonal) {
-        _requireProvisioned(p);
-        expect(_provisioned(p)!.enterpriseCredentials, isEmpty, reason: '${p.id} is free → no enterprise BYOK');
+        final result = _requireProvisioned(p);
+        if (result == null) return;
+        expect(result.enterpriseCredentials, isEmpty, reason: '${p.id} is free → no enterprise BYOK');
       }
     });
 
     test('decrypted configs are non-empty valid JSON for all providers', () async {
-      _requireProvisioned(TestProfiles.enterpriseAllProviders);
-      final creds = _provisioned(TestProfiles.enterpriseAllProviders)!.enterpriseCredentials;
+      final result = _requireProvisioned(TestProfiles.enterpriseAllProviders);
+      if (result == null) return;
+      final creds = result.enterpriseCredentials;
 
       for (final cred in creds) {
         expect(cred.decryptedConfig, isNotEmpty, reason: '${cred.providerName} decryptedConfig');
@@ -557,8 +568,8 @@ void main() {
 
     test('provisioned enterprise creds match expectedProviders per org', () async {
       for (final profile in TestProfiles.enterprise) {
-        _requireProvisioned(profile);
-        final result = _provisioned(profile)!;
+        final result = _requireProvisioned(profile);
+        if (result == null) return;
         final provNames = result.enterpriseCredentials.map((c) => c.providerName).toSet();
 
         if (profile.expectedProviders.isEmpty) {
@@ -589,8 +600,9 @@ void main() {
   // ===========================================================================
   group('Enterprise credential config shapes', () {
     test('OpenAI config has api_keys with key field', () async {
-      _requireProvisioned(TestProfiles.enterpriseAllProviders);
-      final creds = _provisioned(TestProfiles.enterpriseAllProviders)!.enterpriseCredentials;
+      final result = _requireProvisioned(TestProfiles.enterpriseAllProviders);
+      if (result == null) return;
+      final creds = result.enterpriseCredentials;
       final openai = creds.where((c) => c.providerName == 'openai');
       if (openai.isEmpty) {
         markTestSkipped('No OpenAI credential');
@@ -605,8 +617,9 @@ void main() {
     });
 
     test('Claude config has api_keys with key field', () async {
-      _requireProvisioned(TestProfiles.enterpriseAllProviders);
-      final creds = _provisioned(TestProfiles.enterpriseAllProviders)!.enterpriseCredentials;
+      final result = _requireProvisioned(TestProfiles.enterpriseAllProviders);
+      if (result == null) return;
+      final creds = result.enterpriseCredentials;
       final claude = creds.where((c) => c.providerName == 'claude');
       if (claude.isEmpty) {
         markTestSkipped('No Claude credential');
@@ -621,8 +634,9 @@ void main() {
     });
 
     test('Gemini config has google_ai_studio_keys, vertex_api_keys, or service_accounts', () async {
-      _requireProvisioned(TestProfiles.enterpriseAllProviders);
-      final creds = _provisioned(TestProfiles.enterpriseAllProviders)!.enterpriseCredentials;
+      final result = _requireProvisioned(TestProfiles.enterpriseAllProviders);
+      if (result == null) return;
+      final creds = result.enterpriseCredentials;
       final gemini = creds.where((c) => c.providerName == 'gemini');
       if (gemini.isEmpty) {
         markTestSkipped('No Gemini credential');
@@ -642,8 +656,9 @@ void main() {
     });
 
     test('Azure config has api_keys with base_url and deployments', () async {
-      _requireProvisioned(TestProfiles.enterpriseAllProviders);
-      final creds = _provisioned(TestProfiles.enterpriseAllProviders)!.enterpriseCredentials;
+      final result = _requireProvisioned(TestProfiles.enterpriseAllProviders);
+      if (result == null) return;
+      final creds = result.enterpriseCredentials;
       final azure = creds.where((c) => c.providerName == 'azure-openai');
       if (azure.isEmpty) {
         markTestSkipped('No Azure credential');
@@ -663,8 +678,9 @@ void main() {
     });
 
     test('Bedrock config has access_key_credentials or api_keys', () async {
-      _requireProvisioned(TestProfiles.enterpriseAllProviders);
-      final creds = _provisioned(TestProfiles.enterpriseAllProviders)!.enterpriseCredentials;
+      final result = _requireProvisioned(TestProfiles.enterpriseAllProviders);
+      if (result == null) return;
+      final creds = result.enterpriseCredentials;
       final bedrock = creds.where((c) => c.providerName == 'aws-bedrock');
       if (bedrock.isEmpty) {
         markTestSkipped('No Bedrock credential');
@@ -696,15 +712,16 @@ void main() {
   group('AuthenticatedAOTClient fields', () {
     test('createFromProfile populates orgId for enterprise profiles', () async {
       for (final p in TestProfiles.enterprise) {
-        _requireAuth(p);
-        expect(_auth(p)!.orgId, isNotNull, reason: '${p.id} must have orgId');
-        expect(_auth(p)!.orgId, p.orgId, reason: '${p.id} orgId match');
+        final auth = _requireAuth(p);
+        if (auth == null) return;
+        expect(auth.orgId, isNotNull, reason: '${p.id} must have orgId');
+        expect(auth.orgId, p.orgId, reason: '${p.id} orgId match');
       }
     });
 
     test('createFromProfile leaves orgId null for free profiles', () async {
       for (final p in TestProfiles.freePersonal) {
-        _requireAuth(p);
+        if (_requireAuth(p) == null) return;
         // Free profiles have no static orgId; the client discovers the first
         // org dynamically. Free users may or may not belong to an org.
         // The key assertion is that the static profile has orgId == null.
@@ -713,8 +730,8 @@ void main() {
     });
 
     test('callOptionsWithOrgId includes x-org-id for enterprise', () async {
-      _requireAuth(TestProfiles.enterpriseAllProviders);
-      final auth = _auth(TestProfiles.enterpriseAllProviders)!;
+      final auth = _requireAuth(TestProfiles.enterpriseAllProviders);
+      if (auth == null) return;
       expect(auth.hasOrgId, isTrue);
       final opts = auth.callOptionsWithOrgId;
       expect(opts.metadata['x-org-id'], auth.orgId);

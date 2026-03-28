@@ -62,11 +62,11 @@ void main() async {
         }
       }
 
-      // Verify expected providers match
+      // Verify expected providers match (normalize profile aliases to SDK names).
       final actual = result.enterpriseCredentials.map((c) => c.providerName).toSet();
-      final expected = profile.expectedProviders.toSet();
-      if (actual.length == expected.length) {
-        print('  Match: expected ${expected.length}, got ${actual.length}');
+      final expected = profile.expectedProviders.map(_normalizeProviderName).toSet();
+      if (actual.containsAll(expected) && expected.containsAll(actual)) {
+        print('  Match: expected $expected, got $actual');
       } else {
         print('  MISMATCH: expected $expected, got $actual');
       }
@@ -80,3 +80,10 @@ void main() async {
 }
 
 String _mask(String v) => v.length > 16 ? '${v.substring(0, 12)}...${v.substring(v.length - 4)}' : '***';
+
+String _normalizeProviderName(String provider) => switch (provider) {
+  'gcp' => 'gemini',
+  'azure' => 'azure-openai',
+  'bedrock' => 'aws-bedrock',
+  _ => provider,
+};
